@@ -1,25 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { UserContext } from "./lib/User";
+import { Alert, Spin } from "antd";
+import { useIdToken } from "react-firebase-hooks/auth";
+import { auth } from "./lib/firebase";
 
 function App() {
+  const [user, loading, error] = useIdToken(auth);
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (user) {
+      navigate("/home");
+    } else {
+      navigate("/auth");
+    }
+  }, [user]);
+
+  if (loading) {
+    return <Spin />;
+  }
+  if (error) {
+    return (
+      <Alert
+        message="Error Text"
+        description="Error Description Error Description Error Description Error Description Error Description Error Description"
+        type="error"
+        closable
+      />
+    );
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserContext.Provider value={{ isAuthorized: user !== null, user }}>
+      <div className="App">
+        <header className="App-header">
+          <Outlet />
+        </header>
+      </div>
+    </UserContext.Provider>
   );
 }
 

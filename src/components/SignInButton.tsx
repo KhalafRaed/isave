@@ -1,5 +1,5 @@
 import { signInWithPopup } from "@firebase/auth";
-import { auth, provider } from "@/lib/firebase";
+import { auth, provider } from "../lib/firebase";
 import { message } from "antd";
 
 export function SignInButton() {

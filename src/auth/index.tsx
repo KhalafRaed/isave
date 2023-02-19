@@ -1,19 +1,25 @@
-import styles from "@/styles/auth.module.css";
-import { SignInButton } from "@/components/SignInButton";
-import { useUserContext } from "@/lib/User";
-import Router from "next/router";
+import { SignInButton } from "../components/SignInButton";
+import { useUserContext } from "../lib/User";
+import { useNavigate } from "react-router-dom";
+import "./auth.css";
+import { useEffect } from "react";
 
 const AuthPage = () => {
   const { isAuthorized } = useUserContext();
+  const navigate = useNavigate();
 
-  if (isAuthorized) {
-    Router.push("/");
-  }
+  useEffect(() => {
+    if (isAuthorized) {
+      navigate("/home");
+    } else {
+      navigate("/auth");
+    }
+  }, [isAuthorized]);
 
   return (
-    <div className={styles.authPage}>
-      <div className={styles.authBox}>
-        <h1 className={styles.authTitle}>ISave</h1>
+    <div className="authPage">
+      <div className="authBox">
+        <h1 className="authTitle">ISave</h1>
         <SignInButton />
       </div>
     </div>

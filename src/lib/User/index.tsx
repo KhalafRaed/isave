@@ -9,4 +9,11 @@ interface UserContextType {
 export const UserContext = createContext<UserContextType>({
   isAuthorized: false,
 });
-export const useUserContext = () => useContext(UserContext);
+export const useUserContext = () => {
+  const { user, isAuthorized } = useContext(UserContext);
+
+  return {
+    user,
+    isAuthorized,
+  };
+};

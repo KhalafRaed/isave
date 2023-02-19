@@ -1,5 +1,5 @@
 import { MenuProps } from "antd";
-import { auth } from "@/lib/firebase";
+import { auth } from "../../lib/firebase";
 
 export const navbarItems: MenuProps["items"] = [
   {

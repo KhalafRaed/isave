@@ -1,103 +1,53 @@
-import React from "react";
-import { Space, Table, Tag } from "antd";
-import type { ColumnsType } from "antd/es/table";
+import React, { useState } from "react";
+import { Radio, Table, Typography } from "antd";
+import "./styles.css";
+import { ExpenseCols, HistoryTypes, IncomeCols } from "./constants";
+import { ExpensesTransactionType, IncomeTransactionType } from "../../types";
+import { ColumnsType } from "antd/es/table";
 
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string[];
+const { Title } = Typography;
+
+interface HistoryProps {
+  incomeHistory: IncomeTransactionType[];
+  expenseHistory: ExpensesTransactionType[];
+  loading: boolean;
 }
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: "Type",
-    dataIndex: "type",
-    key: "type",
-    render: (text) => <a>{text}</a>,
-    onFilter: (value, record) => true,
-    filters: [
-      {
-        text: "London",
-        value: "London",
-      },
-      {
-        text: "New York",
-        value: "New York",
-      },
-    ],
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
-    filterSearch: true,
-    filtered: true,
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-    filterSearch: true,
-    filtered: true,
-  },
-  {
-    title: "Tags",
-    key: "tags",
-    dataIndex: "tags",
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-          if (tag === "loser") {
-            color = "volcano";
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
+export default function History({
+  incomeHistory,
+  expenseHistory,
+  loading,
+}: HistoryProps) {
+  const [selectedType, setSelectedType] = useState<HistoryTypes>(
+    HistoryTypes.Income
+  );
 
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
-
-export default function History() {
-  return <Table columns={columns} dataSource={data} />;
+  return (
+    <>
+      <div className="history-tabs">
+        <Title level={3}>{selectedType}</Title>
+        <Radio.Group
+          defaultValue={HistoryTypes.Income}
+          buttonStyle="outline"
+          onChange={(e) => setSelectedType(e.target.value)}
+        >
+          <Radio.Button value={HistoryTypes.Income}>Income</Radio.Button>
+          <Radio.Button value={HistoryTypes.Expenses}>Expenses</Radio.Button>
+        </Radio.Group>
+      </div>
+      {selectedType === HistoryTypes.Income ? (
+        <Table
+          columns={IncomeCols}
+          dataSource={incomeHistory}
+          loading={loading}
+        />
+      ) : (
+        <Table
+          columns={ExpenseCols}
+          dataSource={expenseHistory}
+          loading={loading}
+        />
+      )}
+    </>
+  );
 }

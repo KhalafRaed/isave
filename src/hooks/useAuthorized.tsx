@@ -1,12 +1,10 @@
-import { useUserContext } from "@/lib/User";
-import Router from "next/router";
-import { useEffect } from "react";
+import { useUserContext } from "../lib/User";
+import { useNavigate } from "react-router-dom";
 
 export default function useAuthorized() {
-  const { isAuthorized } = useUserContext();
-  useEffect(() => {
-    if (!isAuthorized) {
-      Router.push("/auth");
-    }
-  }, [isAuthorized]);
+  const { user } = useUserContext();
+  const navigate = useNavigate();
+  if (!user) {
+    navigate("/auth");
+  }
 }
