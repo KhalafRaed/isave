@@ -1,0 +1,25 @@
+.authPage {
+    width: 100vw;
+    height: 100vh;
+    background-color: #dbdbdb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.authBox {
+    width: 500px;
+    height: 250px;
+    background-color: white;
+    box-shadow: 5px 4px 13px 6px #d2d2d2;
+    border-radius: 2px;
+    display: flex;
+    flex-flow: column;
+}
+
+.authTitle {
+    font-size: 26px;
+    font-weight: 100;
+    text-align: center;
+    padding: 26px;
+}
